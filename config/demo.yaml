@@ -4,3 +4,14 @@
 "awsProfile": "default"
 "environment": "demo"
 "cidr": "10.23.0.0/16"
+
+scalingGroup: 
+  - name: infra
+    maxSize: 3
+    minSize: 0
+    desiredSize: 0
+    outbound: true
+    associatePublicIP: true
+    instanceType: t3
+    instanceSize: micro
+    image: "amazon_linux_2"

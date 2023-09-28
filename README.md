@@ -10,11 +10,22 @@
 "awsProfile": "default"
 "environment": "demo"
 "cidr": "10.23.0.0/16"
+
+scalingGroup: 
+  - name: infra
+    maxSize: 3
+    minSize: 0
+    desiredSize: 0
+    outbound: true
+    associatePublicIP: true
+    instanceType: t3
+    instanceSize: micro
+    image: "amazon_linux_2"
 ```
 
 ## Ouput
 
-This CDK will create a main stack and nested stacks (NetworkingStack this time)
+This CDK will create a main stack and nested stacks (NetworkingStack, AutoScalingGroup)
 
 Why I don't put everything into a single stack:
 * Hard to maintain code base since it can be very long
@@ -25,6 +36,7 @@ The reason I developed it in Go instead of Typescript while I still can do it is
 ![Created stacks](.images/stacks.png)
 ![Created subnets](.images/subnets.png)
 ![Created vpc](.images/vpc.png)
+![Created auto scaling group](.images/autoscalinggroup.png)
 ## Useful commands
 
  * `cdk deploy --context environment=demo`      deploy this stack to your default AWS account/region

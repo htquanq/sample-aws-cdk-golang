@@ -52,7 +52,12 @@ func main() {
 			Env: env(Config(yamlFile)),
 		},
 	})
-	stacks.NetworkStack(stack, "htquanqDemoNetworkingStack", Config(yamlFile), nil)
+	// Create network stack
+	_, networkStack := stacks.NetworkStack(stack, "htquanqDemoNetworkingStack", Config(yamlFile), nil)
+
+	stacks.AutoScalingGroupNestedStack(stack, "htquanqDemoAutoScalingGroupStack", Config(yamlFile), &stacks.AutoScalingGroupsNestedStackProps{
+		Vpc: *&networkStack,
+	})
 	app.Synth(nil)
 }
 
