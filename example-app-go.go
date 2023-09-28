@@ -9,6 +9,7 @@ import (
 
 	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 	. "example-app-go/helper"
+	"example-app-go/interfaces"
 	"example-app-go/stacks"
 
 	"github.com/aws/constructs-go/constructs/v10"
@@ -48,7 +49,7 @@ func main() {
 
 	stack := NewExampleAppGoStack(app, "htquanqDemoStack", &ExampleAppGoStackProps{
 		awscdk.StackProps{
-			Env: env(reflect.ValueOf(envName).String()),
+			Env: env(Config(yamlFile)),
 		},
 	})
 	stacks.NetworkStack(stack, "htquanqDemoNetworkingStack", Config(yamlFile), nil)
@@ -57,15 +58,9 @@ func main() {
 
 // env determines the AWS environment (account+region) in which our stack is to
 // be deployed. For more information see: https://docs.aws.amazon.com/cdk/latest/guide/environments.html
-func env(environment string) *awscdk.Environment {
-	yamlFile, err := os.ReadFile("./config/" + environment + ".yaml")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	appConfig := Config(yamlFile)
+func env(AppConfig interfaces.AppConfig) *awscdk.Environment {
 	return &awscdk.Environment{
-		Account: jsii.String(appConfig.AWSAccountID),
-		Region:  jsii.String(appConfig.AWSProfileRegion),
+		Account: jsii.String(AppConfig.AWSAccountID),
+		Region:  jsii.String(AppConfig.AWSProfileRegion),
 	}
 }
