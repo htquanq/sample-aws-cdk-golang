@@ -18,9 +18,9 @@ This CDK will create a main stack and nested stacks (NetworkingStack this time)
 
 Why I don't put everything into a single stack:
 * Hard to maintain code base since it can be very long
-* Made changes to single stack can affect other resources that I don't want to modify
+* Made changes to single code base can affect resources that I don't want to modify (by mistake)
 
-The reason I develop it in Go instead of Typescript while I still can do it is I work with Kubernetes and Helm so Go is more familiar to me and I want to unite the language I use
+The reason I developed it in Go instead of Typescript while I still can do it is I work with Kubernetes and Helm so Go is more familiar to me and I want to unite the language I use
 
 ![Created stacks](.images/stacks.png)
 ![Created subnets](.images/subnets.png)
@@ -30,3 +30,6 @@ The reason I develop it in Go instead of Typescript while I still can do it is I
  * `cdk deploy --context environment=demo`      deploy this stack to your default AWS account/region
  * `cdk diff --context environment=demo`        compare deployed stack with current state
  * `cdk synth --context environment=demo`       emits the synthesized CloudFormation template
+
+## Notes
+You can view my aws-cdk-app with Typescript in [here](https://github.com/htquanq/sample-aws-cdk)
