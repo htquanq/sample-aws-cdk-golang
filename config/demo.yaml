@@ -14,4 +14,4 @@ scalingGroup:
     associatePublicIP: true
     instanceType: t3
     instanceSize: micro
-    image: "amazon_linux_2"
+    image: "ubuntu"

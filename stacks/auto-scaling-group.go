@@ -1,6 +1,7 @@
 package stacks
 
 import (
+	"example-app-go/helper"
 	"example-app-go/interfaces"
 	"fmt"
 
@@ -25,8 +26,7 @@ func AutoScalingGroupNestedStack(scope constructs.Construct, id string, AppConfi
 	stack := awscdk.NewNestedStack(scope, &id, &autoScalingGroupProps)
 	for i := 0; i < len(AppConfig.AutoScalingGroupObjects); i++ {
 		instance := fmt.Sprintf("%s.%s", *&AppConfig.AutoScalingGroupObjects[i].InstanceType, *&AppConfig.AutoScalingGroupObjects[i].InstanceSize)
-		// image := fmt.Sprintf("%s", strings.ToUpper(*&AppConfig.AutoScalingGroupObjects[i].Image))
-		awsautoscaling.NewAutoScalingGroup(stack, aws.String("demo-autoscaling-group"),
+		awsautoscaling.NewAutoScalingGroup(stack, aws.String(*&AppConfig.AutoScalingGroupObjects[i].Name),
 			&awsautoscaling.AutoScalingGroupProps{
 				AutoScalingGroupName:     &AppConfig.AutoScalingGroupObjects[i].Name,
 				AllowAllOutbound:         &AppConfig.AutoScalingGroupObjects[i].Outbound,
@@ -34,10 +34,8 @@ func AutoScalingGroupNestedStack(scope constructs.Construct, id string, AppConfi
 				DesiredCapacity:          &AppConfig.AutoScalingGroupObjects[i].DesiredSize,
 				MinCapacity:              &AppConfig.AutoScalingGroupObjects[i].MinSize,
 				MaxCapacity:              &AppConfig.AutoScalingGroupObjects[i].MaxSize,
-				MachineImage: awsec2.AmazonLinuxImage(awsec2.NewAmazonLinuxImage(&awsec2.AmazonLinuxImageProps{
-					Generation: awsec2.AmazonLinuxGeneration_AMAZON_LINUX_2,
-				})),
-				InstanceType: awsec2.NewInstanceType(&instance),
+				MachineImage:             helper.ImageMapper(*&AppConfig.AutoScalingGroupObjects[i].Image),
+				InstanceType:             awsec2.NewInstanceType(&instance),
 				HealthCheck: awsautoscaling.HealthCheck_Ec2(
 					&awsautoscaling.Ec2HealthCheckOptions{
 						Grace: awscdk.Duration_Minutes(aws.Float64(15)),
