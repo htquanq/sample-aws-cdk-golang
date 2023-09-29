@@ -8,8 +8,11 @@
 "accountId": "756007437776"
 "region": "ap-southeast-1"
 "awsProfile": "default"
-"environment": "demo"
-"cidr": "10.23.0.0/16"
+
+vpc:
+  name: "demo"
+  cidr: 10.23.0.0/16
+  cidrMask: 28
 
 scalingGroup: 
   - name: infra
@@ -20,7 +23,8 @@ scalingGroup:
     associatePublicIP: true
     instanceType: t3
     instanceSize: micro
-    image: "amazon_linux_2"
+    image: "ubuntu"
+    subnetType: "public"
 ```
 
 ## Ouput
