@@ -26,11 +26,17 @@ func AutoScalingGroupNestedStack(scope constructs.Construct, id string, AppConfi
 	stack := awscdk.NewNestedStack(scope, &id, &autoScalingGroupProps)
 	for i := 0; i < len(AppConfig.AutoScalingGroupObjects); i++ {
 		instance := fmt.Sprintf("%s.%s", *&AppConfig.AutoScalingGroupObjects[i].InstanceType, *&AppConfig.AutoScalingGroupObjects[i].InstanceSize)
+		isPublicSubnet := false
+		if helper.SubnetType(AppConfig.AutoScalingGroupObjects[i].SubnetType) == awsec2.SubnetType_PUBLIC {
+			isPublicSubnet = true
+		}
+
 		awsautoscaling.NewAutoScalingGroup(stack, aws.String(*&AppConfig.AutoScalingGroupObjects[i].Name),
 			&awsautoscaling.AutoScalingGroupProps{
 				AutoScalingGroupName:     &AppConfig.AutoScalingGroupObjects[i].Name,
 				AllowAllOutbound:         &AppConfig.AutoScalingGroupObjects[i].Outbound,
-				AssociatePublicIpAddress: &AppConfig.AutoScalingGroupObjects[i].AssociatePublicIP,
+				VpcSubnets:               &awsec2.SubnetSelection{SubnetType: helper.SubnetType(AppConfig.AutoScalingGroupObjects[i].SubnetType)},
+				AssociatePublicIpAddress: aws.Bool(isPublicSubnet),
 				DesiredCapacity:          &AppConfig.AutoScalingGroupObjects[i].DesiredSize,
 				MinCapacity:              &AppConfig.AutoScalingGroupObjects[i].MinSize,
 				MaxCapacity:              &AppConfig.AutoScalingGroupObjects[i].MaxSize,

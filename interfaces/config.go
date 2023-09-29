@@ -10,14 +10,21 @@ type AutoScalingGroup struct {
 	InstanceType      string  `yaml:"instanceType"`
 	InstanceSize      string  `yaml:"instanceSize"`
 	Image             string  `yaml:"image"`
+	SubnetType        string  `yaml:"subnetType"`
+}
+
+type VpcConfig struct {
+	Name            string  `yaml:"name"`
+	Cidr            string  `yaml:"cidr"`
+	CidrMask        float64 `yaml:"cidrMask"`
+	InternetGateway bool    `yaml:"internetGateway"`
 }
 
 type AppConfig struct {
 	AWSAccountID            string             `yaml:"accountId"`
 	AWSProfileName          string             `yaml:"awsProfile"`
 	AWSProfileRegion        string             `yaml:"region"`
-	VpcId                   string             `yaml:"vpcId"`
 	Environment             string             `yaml:"environment"`
-	Cidr                    string             `yaml:"cidr"`
 	AutoScalingGroupObjects []AutoScalingGroup `yaml:"scalingGroup"`
+	Vpc                     VpcConfig          `yaml:"vpc"`
 }
